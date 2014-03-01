@@ -1,0 +1,16 @@
+{
+  "name": "tank_battle",
+  "version": "0.0.0",
+  "authors": [
+    "freshsun <freshsun@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "src/bower_components",
+    "test",
+    "tests"
+  ]
+}
