@@ -10,13 +10,7 @@ module.exports = (grunt) ->
         expand:true
         cwd:'src'
         src:'**/*.coffee'
-        dest:'build/'
-        ext:'.js'
-      buildtest:
-        expand:true
-        cwd:'test/src'
-        src:'**/*.coffee'
-        dest:'test/'
+        dest:'www/'
         ext:'.js'
 
     jade:
@@ -26,14 +20,14 @@ module.exports = (grunt) ->
         expand:true
         cwd:'src/'
         src:'**/*.jade'
-        dest:'build/'
+        dest:'www/'
         ext:'.html'
 
     compass:
       build:
         options:
-          sassDir:'src/styles'
-          cssDir:'build/styles'
+          sassDir:'src'
+          cssDir:'www'
 
 
     watch:
@@ -41,19 +35,23 @@ module.exports = (grunt) ->
         expand:true
         files:['src/**/**','!**/*.jade','!**/*.coffee','!**/*.sass']
         tasks:['newer:copy']
-      html:
-        files:['src/**/*.jade']
-        tasks:['newer:jade']
+      jstemplate:
+        files:['src/app/components/**/*.jade']
+        tasks:['newer:jade','ngtemplates']
+      inithtml:
+        files:['src/index.jade']
+        tasks:['newer:jade', 'sails-linker']
         options:
           livereload:true
       js:
-        files:['src/**/*.coffee','test/**/*.coffee']
+        files:['src/**/*.coffee']
         tasks:['newer:coffee']
-        options:
-          livereload:true
       css:
         files:['src/**/*.sass']
         tasks:['compass']
+      jscssindex:
+        files:['www/**/*.js', 'www/**/*.css']
+        tasks:['sails-linker']
         options:
           livereload:true
 
@@ -61,31 +59,33 @@ module.exports = (grunt) ->
       build:
         expand:true
         cwd:'src/'
-        src:'**/*.{json,svg,png,gif,jpg,ttf,html,js,css}'
-        dest:'build/'
+        src:['**/*.{json,svg,png,gif,jpg,ttf,html,js,css}']
+        dest:'www/'
       dist:
         expand:true
-        cwd:'build/'
-        src:'**/*.{json,svg,png,gif,jpg,ttf,html,js,css}'
+        cwd:'www/'
+        src:['**/*.{json,svg,png,gif,jpg,ttf,html,js,css}']
         dest:'dist/'
 
     clean:
       build:
-        src:['build/**/*']
+        src:['www/**/*']
       dist:
         src:['dist/**/*']
-      test:
-        src:['test/e2e/**/*.js','test/unit/**/*.js']
 
-    bower:
-      install:
-        options:
-          targetDir:'./src/lib'
-          cleanTargetDir:true
+    bowerInstall:
+      target:
+        src:['src/index.jade']
+        cwd: ''
+        dependencies: true
+        devDependencies: false
+        exclude: []
+        fileTypes: {}
+        ignorePath: 'src/'
 
     karma:
       unit:
-        configFile:'test/karma.conf.js'
+        configFile:'karma.conf.js'
         autorun:true
 
 #    protractor:
@@ -103,16 +103,34 @@ module.exports = (grunt) ->
         options:
           port:8000
           hostname:'0.0.0.0'
-          base:'build'
+          base:'www'
           keepalive:true
           livereload:true
 
+    'sails-linker':
+      js:
+        options:
+          startTag: '<!--start scripts-->'
+          endTag: '<!--end scripts-->'
+          fileTmpl: '<script src="%s"></script>'
+          appRoot: 'www/'
+##TODO clarify the js dependencies
+        files:
+          'www/index.html': ['www/app/assets/**/*.js', 'www/app/**/*.js','www/app/components/**/*.js']
+      css:
+        options:
+          startTag: '<!--start css-->'
+          endTag: '<!--end css-->'
+          fileTmpl: '<link href="%s"/>'
+          appRoot: 'www/'
+        files:
+          'www/index.html': [ 'www/app/**/*.css']
 
-  grunt.registerTask 'builddev', ['newer:jade:build','newer:coffee:build','compass:build', 'newer:copy:build']
-  grunt.registerTask 'cleandev', ['clean:build','clean:dist']
+    ngtemplates:
+      app:
+        cwd:      'www/app'
+        src:      'components/**/*.html'
+        dest:     'www/app/templates.js'
+
+  grunt.registerTask 'build', ['bowerInstall', 'newer:jade:build','newer:coffee:build','compass:build', 'newer:copy:build', 'ngtemplates','sails-linker']
   grunt.registerTask 'unit', ['karma']
-  grunt.registerTask 'buildtest', ['newer:coffee:buildtest']
-  grunt.registerTask 'cleantest', ['clean:test']
-  ###
-  available tasks watch,karma
-###
