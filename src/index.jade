@@ -1,19 +1,22 @@
 doctype html
 html(ng-app="tankApp")
-    head
-        script(type="text/javascript" src="lib/angular/angular.js")
-        script(type="text/javascript" src="app/main.js")
-        script(type="text/javascript" src="app/websocket.js")
-        script(type="text/javascript" src="app/tank/tank.js")
-        script(type="text/javascript" src="app/action/keypress.js")
-        link(rel="stylesheet" type="text/css" href="lib/angular/angular.js")
-        link(rel="stylesheet" type="text/css" href="styles/main.css")
-        meta(name="viewport" content="width=device-width, user-scalable=no")
-        meta(name="mobile-web-app-capable" content="yes")
-        meta(name="apple-mobile-web-app-capable" content="yes")
+  head
+    // bower:js
+    script(src='bower_components/jquery/dist/jquery.js')
+    script(src='bower_components/angular/angular.js')
+    script(src='bower_components/bootstrap/dist/js/bootstrap.js')
+    // endbower
+    //start scripts
+    //end scripts
+    // bower:css
+    link(rel='stylesheet', href='bower_components/bootstrap/dist/css/bootstrap.css')
+    // endbower
+    //start css
+    //end css
+
+    meta(name="viewport" content="width=device-width, user-scalable=no")
+    meta(name="mobile-web-app-capable" content="yes")
+    meta(name="apple-mobile-web-app-capable" content="yes")
 
 
-    body(ng-controller="appCtrl", keypress)
-        #app-canvas
-            div(tank,left=2,top=5)
 

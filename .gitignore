@@ -3,7 +3,9 @@
 .idea/*
 node_modules/*
 bower_components/*
+src/bower_components/*
 test/e2e/*
 test/unit/*
 dist/*
 build/*
+www/*

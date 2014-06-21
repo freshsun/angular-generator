@@ -73,7 +73,7 @@ module.exports = (grunt) ->
       dist:
         src:['dist/**/*']
 
-    bowerInstall:
+    wiredep:
       target:
         src:['src/index.jade']
         cwd: ''
@@ -132,5 +132,5 @@ module.exports = (grunt) ->
         src:      'components/**/*.html'
         dest:     'www/app/templates.js'
 
-  grunt.registerTask 'build', ['bowerInstall', 'newer:jade:build','newer:coffee:build','compass:build', 'newer:copy:build', 'ngtemplates','sails-linker']
+  grunt.registerTask 'build', ['wiredep', 'newer:jade:build','newer:coffee:build','compass:build', 'newer:copy:build', 'ngtemplates','sails-linker']
   grunt.registerTask 'unit', ['karma']
