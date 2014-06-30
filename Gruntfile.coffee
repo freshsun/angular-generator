@@ -16,6 +16,7 @@ module.exports = (grunt) ->
     jade:
       options:
         pretty:true
+        doctype:'html'
       build:
         expand:true
         cwd:'src/'
