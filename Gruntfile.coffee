@@ -122,7 +122,7 @@ module.exports = (grunt) ->
         options:
           startTag: '<!--start css-->'
           endTag: '<!--end css-->'
-          fileTmpl: '<link rel="stylesheet" href="%s"/>'
+          fileTmpl: '<link rel="stylesheet" href="%s">'
           appRoot: 'www/'
         files:
           'www/index.html': [ 'www/app/**/*.css']
